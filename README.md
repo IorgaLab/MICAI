@@ -43,7 +43,7 @@ Let's get into details of the different options to choose from.
 The prediction can be made on 3 different species :
 
 - _Escherichia coli_ : Ec
-- _Klepsiella pneumoniae_ : Kp
+- _Klebsiella pneumoniae_ : Kp
 - _Pseudomonas aeruginosa_ : Pa
 
 The species can be chosen using the option "--species [code]", with [code] being the 2-letters of the species. \
