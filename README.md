@@ -1,7 +1,7 @@
 # MICAI Antibioresistance Predictor
 
 This project is part of [Seq2Diag](https://anr.fr/ProjetIA-20-PAMR-0010), which plans to use AI methods to make in-silico determinations of the antibioresistance phenotypes for _Escherichia coli_, _Klebsiella pneumoniae_ and _Pseudomonas aeruginosa_. \
-This repository is the extension of our [web-service](). \
+This repository is the extension of our [web-service](http://iorgalab.org:4567/micai). \
 It enables the user to :
 
 - Run the exact same predictions than the web-service locally
