@@ -27,7 +27,7 @@ def main():
 
     for path in list_path:
         # Remove extension, take only the last part -> name
-        list_names.append(path.split(".")[0].split("/")[-1])
+        list_names.append(path.split(".")[-2].split("/")[-1])
     
     # Multiprocessing analysis
     partial_process=partial(analyze,species=args.species,mode=args.mode,encoding=args.encoding,size=args.size,format=args.format)
