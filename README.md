@@ -19,6 +19,12 @@ Our tool requires :
 
 # Installation
 
+First, let's clone the repository into your computer.
+```
+git clone https://github.com/IorgaLab/MICAI.git
+cd MICAI
+```
+
 First, let's create a Conda environment.
 If you wish to not use one, you can directly install the dependencies.
 
