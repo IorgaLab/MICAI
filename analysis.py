@@ -34,6 +34,10 @@ def analyze(file,species,mode,encoding,size,format):
 
     rep="data/"+species+"_"+str(N)+"-"+encoding+"_"+mode+"/"
 
+    if not os.path.exists(rep):
+        print("This seem to be a mismatch in the configuration")
+        raise Exception("Mismatch : configuration not found")
+
 
     records = list(SeqIO.parse(file, format))
     s=set()
