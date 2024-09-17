@@ -1,4 +1,4 @@
-name: env_prediction
+name: env_predictor
 channels:
   - defaults
 dependencies:
