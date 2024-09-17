@@ -25,15 +25,16 @@ git clone https://github.com/IorgaLab/MICAI.git
 cd MICAI
 ```
 
-First, let's create a Conda environment.
+Then, let's create a Conda environment.
+If you did not install it yet, have a look on this  [link](https://conda.io/projects/conda/en/latest/user-guide/index.html). 
 If you wish to not use one, you can directly install the dependencies.
 
 ```
 conda env create -p env_predictor --file environment.yml
 conda activate env_predictor
 ```
-
-Then, let's decompress the data and models. It weights about 250Mo.
+Each time you want to use the environment, you will need this last command to activate it. To deactivate it, you simply need to use the command "conda deactivate".
+Finally, let's decompress the data and models. It weights about 250Mo.
 
 ```
 tar -xjf data.tar.bz2
