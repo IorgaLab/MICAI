@@ -1,7 +1,7 @@
 # MICAI Antibioresistance Predictor
 
-This project is part of [Seq2Diag](https://anr.fr/ProjetIA-20-PAMR-0010), which plans to use AI methods to make in-silico determinations of the antibioresistance phenotypes for _Escherichia coli_, _Klebsiella pneumoniae_ and _Pseudomonas aeruginosa_.
-This repository is the extension of our [web-service]().
+This project is part of [Seq2Diag](https://anr.fr/ProjetIA-20-PAMR-0010), which plans to use AI methods to make in-silico determinations of the antibioresistance phenotypes for _Escherichia coli_, _Klebsiella pneumoniae_ and _Pseudomonas aeruginosa_. \
+This repository is the extension of our [web-service](). \
 It enables the user to :
 
 - Run the exact same predictions than the web-service locally
@@ -25,15 +25,16 @@ git clone https://github.com/IorgaLab/MICAI.git
 cd MICAI
 ```
 
-Then, let's create a Conda environment.
-If you did not install it yet, have a look on this  [link](https://conda.io/projects/conda/en/latest/user-guide/index.html). 
+Then, let's create a Conda environment. \
+If you did not install it yet, have a look on this  [link](https://conda.io/projects/conda/en/latest/user-guide/index.html). \
 If you wish to not use one, you can directly install the dependencies.
 
 ```
 conda env create -p env_predictor --file environment.yml
 conda activate env_predictor
 ```
-Each time you want to use the environment, you will need this last command to activate it. To deactivate it, you simply need to use the command "conda deactivate".
+Each time you want to use the environment, you will need this last command to activate it. \
+To deactivate it, you simply need to use the command "conda deactivate".\
 Finally, let's decompress the data and models. It weights about 250Mo.
 
 ```
@@ -109,4 +110,10 @@ This code is made for the parallel analysis of multiple files (using multiproces
 
 ```
 python group_predictor.py --path [path] --species [species] --mode [mode] --encoding [encoding] --output [output]
+```
+
+# Example of use
+```
+python single_predictor.py --file example_sample_Ec.faa --species Ec --mode binary --encoding prot
+python group_predictor.py --path example_folder_assembly_Kp --species Kp --mode regression --encoding nucl --size 42 --output tab_Kp.csv
 ```
