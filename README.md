@@ -84,8 +84,8 @@ The default format is fasta. It is possible to change it using "--format [format
 In our web-service, the subsequence size can not be chosen as they show similar perfomance. \
 In this repertory, the same sizes will be chosen by default, but the user can choose to use an other one.
 
-- For the nucleotide format, the default size is 24, and can be chosen : 18, 24, 33, 42, 51
-- For the protein format, the default size is 8, and can be chosen : 6, 8, 11, 14, 17 
+- For the nucleotide format, the default size is 24, and can be chosen : 24, 33, 42
+- For the protein format, the default size is 8, and can be chosen : 8, 11, 14 
 
 To do so, use the option "--size [code]", with [code] being one of the options above.
 

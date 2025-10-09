@@ -4,7 +4,7 @@ import pandas as pd
 import xgboost as xgb
 from Bio import SeqIO
 import json
-
+import os
 
 def remove_point(x):
     if x>=1:
@@ -32,12 +32,9 @@ def analyze(file,species,mode,encoding,size,format):
     if encoding=="nucl":
         encoding="mers"
 
-    rep="data/"+species+"_"+str(N)+"-"+encoding+"_"+mode+"/"
-
-    if not os.path.exists(rep):
-        print("This seem to be a mismatch in the configuration")
-        raise Exception("Mismatch : configuration not found")
-
+    rep = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), "data", f"{species}_{N}-{encoding}_{mode}")
+    )
 
     records = list(SeqIO.parse(file, format))
     s=set()
@@ -47,8 +44,8 @@ def analyze(file,species,mode,encoding,size,format):
         for mot in range(n-N+1):
             s.add(seq[mot:mot+N])
 
-    d_len_pos=load_json(rep+"len_pos.json")
-    name_to_new_pos=load_json(rep+"name_to_new_pos.json")
+    d_len_pos=load_json(rep+"/len_pos.json")
+    name_to_new_pos=load_json(rep+"/name_to_new_pos.json")
 
     tab=np.zeros(d_len_pos["len_pos"])
     for elem in s:
@@ -57,23 +54,20 @@ def analyze(file,species,mode,encoding,size,format):
             tab[val]=1
  
     if np.mean(tab)<0.01:
-       print(file,np.mean(tab))
-       raise Exception("The matrix is empty (or almost), are you sure it is the right format?")
+        print(np.mean(tab))
+        print("The feature matrix is empty (or almost), are you sure it is the right encoding format? Nucleotides? Proteins?")
 
-    dico_names=load_json(rep+"dico_names.json")
-    dico_alpha=load_json(rep+"dico_alpha.json")
-
-    if mode=="regression":
-        group=load_json(rep+"groupage.json")
+    dico_names=load_json(rep+"/dico_names.json")
+    dico_alpha=load_json(rep+"/dico_alpha.json")
 
     if mode=="binary":
-        dico_treshold=load_json(rep+"dico_threshold.json")
+        dico_treshold=load_json(rep+"/dico_threshold.json")
 
     dico_results={}
 
     for antibio in dico_names.keys():
 
-        equiv_features=load_json(rep+"equiv_features_"+antibio+".json")
+        equiv_features=load_json(rep+"/equiv_features_"+antibio+".json")
 
         array=np.zeros((1,len(equiv_features)),dtype=np.uint8)
         for j, cols in enumerate(equiv_features):
@@ -91,7 +85,7 @@ def analyze(file,species,mode,encoding,size,format):
 
 
         model=xgb.Booster()
-        model.load_model(rep+"model_"+antibio+".json")
+        model.load_model(rep+"/model_"+antibio+".json")
 
         if mode=="binary":
             y_pred=model.inplace_predict(pd.DataFrame(array))[0]>float(dico_treshold[antibio])
@@ -100,18 +94,22 @@ def analyze(file,species,mode,encoding,size,format):
             else:
                 dico_results[dico_names[antibio]]="Sensible"
         
-        if mode=="regression":
-            with open(rep+"label_encoder_"+antibio,"rb") as f:
-                le=pickle.load(f)
-            y_pred=np.clip(round((model.inplace_predict(pd.DataFrame(array)))[0]),0,len(le.classes_)-1)
-            y_le=le.inverse_transform([y_pred])[0]
-
-            y_final=False
-            for k in group[antibio]:
-                if y_le in k:
-                    dico_results[dico_names[antibio]]="From "+remove_point(2.**min(k))+" to "+remove_point(2.**max(k))
-                    y_final=True
-            if y_final==False:
-                dico_results[dico_names[antibio]]=remove_point(2.**y_le)
+        if mode=="regression":  
+            with open(rep + f"/dillution_range_{antibio}.json", "r") as f:
+                dillution_range = json.load(f)
+                
+            y_pred=np.clip(round((model.inplace_predict(pd.DataFrame(array)))[0]), np.log2(dillution_range["minimum"]) , np.log2(dillution_range["maximum"])+1)
+            y_pred = 2.**y_pred
+            
+            if y_pred == dillution_range["minimum"]:
+                sign = "<="
+            elif y_pred == dillution_range["maximum"]*2:
+                sign = ">"
+                y_pred = dillution_range["maximum"]
+            else:
+                sign = ""
+            
+            prediction = remove_point(y_pred)
+            dico_results[dico_names[antibio]]=sign+prediction
 
     return(dico_results)

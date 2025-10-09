@@ -9,34 +9,36 @@ from functools import partial
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument( "--path", default = None, type=str, required=True, help="Path of the folder")
+    parser.add_argument( "--type", default = None, type=str, required=True, choices=["file","folder"], help="file OR folder")
+    parser.add_argument( "--path", default = None, type=str, required=True, help="Name of the file/folder")
     parser.add_argument( "--species", default = None, type=str, required=True, choices=["Kp","Ec","Pa"], help="Espèce (Kp,Ec,Pa)")
     parser.add_argument( "--mode", default = None, type=str, required=True, help="Mode : binary or regression", choices=["binary","regression"])
     parser.add_argument( "--output", default = None, type=str, required=True, help="Name of the csv file to store the data in")
-    parser.add_argument( "--size", default = None, type=int, help="Size of n-grams chosen")
+    parser.add_argument( "--size", default=None,type=int,help="Size of n-gram/k-mer analysis, default =8 for prot and =24 for nucl",choices=[8,11,14,24,33,42])
     parser.add_argument( "--encoding", default = None, type=str, required=True, help="Encoding : nucl or prot", choices=["nucl","prot"])    
-    parser.add_argument( "--format", default="fasta", type=str, help="Format of the given file, fasta by default")
     args = parser.parse_args()
 
-
-    tmp=os.listdir(args.path)
-    list_path=[args.path+"/"+t for t in tmp]
-
+    if args.type=="file":
+        #TODO
+        sys.exit()
+    elif args.type=="folder":
+        tmp=os.listdir(args.path)
+        list_path=[args.path+"/"+t for t in tmp]
+    else:
+        print("Error")
     list_path.sort()
     list_names=[]
 
     for path in list_path:
-        # Remove extension, take only the last part -> name
-        list_names.append(path.split(".")[-2].split("/")[-1])
+        list_names.append(path.split(".")[0].split("/")[-1])
     
-    # Multiprocessing analysis
-    partial_process=partial(analyze,species=args.species,mode=args.mode,encoding=args.encoding,size=args.size,format=args.format)
+
+    partial_process=partial(analyze,species=args.species,mode=args.mode,encoding=args.encoding,size=args.size,format="fasta")
     with multiprocessing.Pool() as pool:
         results=pool.map(partial_process,list_path)
 
     names_antibio=results[0].keys()
 
-    # Fill the results into a csv file
     dataframe=pd.DataFrame(columns=names_antibio,index=list_names)
 
     for k in range(len(results)):

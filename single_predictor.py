@@ -8,7 +8,7 @@ if __name__ == "__main__":
     parser.add_argument( "--species", default = None, type=str, required=True, help="Species (Kp,Ec,Pa)",choices=["Kp","Ec","Pa"])
     parser.add_argument( "--mode", default = None, type=str, required=True, help="Mode : binary or regression", choices=["binary","regression"])
     parser.add_argument( "--encoding", default = None, type=str, required=True, help="Encoding : nucl or prot", choices=["nucl","prot"])
-    parser.add_argument( "--size", default=None,type=int,help="Size of n-gram/k-mer analysis, not mandatory",choices=[6,8,11,14,17,18,24,33,42,51])
+    parser.add_argument( "--size", default=None,type=int,help="Size of n-gram/k-mer analysis, default =8 for prot and =24 for nucl",choices=[8,11,14,24,33,42])
     parser.add_argument( "--format", default="fasta", type=str, help="Format of the given file, fasta by default")
     args = parser.parse_args()
 
