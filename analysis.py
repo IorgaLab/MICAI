@@ -92,7 +92,7 @@ def analyze(file,species,mode,encoding,size,format):
             if y_pred:
                 dico_results[dico_names[antibio]]="Resistant"
             else:
-                dico_results[dico_names[antibio]]="Sensible"
+                dico_results[dico_names[antibio]]="Susceptible"
         
         if mode=="regression":  
             with open(rep + f"/dillution_range_{antibio}.json", "r") as f:
