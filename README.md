@@ -124,5 +124,5 @@ We analyzed the XGBoost models trained with proteins k-mer encoding for the thre
 - shap_presence: the Shapley value for strains in the training set where the feature is present
 - shap_absence: the Shapley value for strains in the training set where the feature is absent
 - shap_diff: shap_presence - shap_absence
-- protein: the annotation from PROKKA of the feature.
+- proteins: the annotation from PROKKA of the feature.
 Each feature is a group of k-mer with the same presence/absence profile in the training set. We examined the gene names to which they belong. Each k-mer from a feature, can be found in one or multiple protein sequences that can occur within the same strain or across different strains, potentially with different protein annotations. Additionally, each protein sequence has a single annotation, possibly shared with other protein sequences.
