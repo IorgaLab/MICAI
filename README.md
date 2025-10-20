@@ -1,7 +1,7 @@
 # MICAI Antibioresistance Predictor
 
 This project is part of [Seq2Diag](https://anr.fr/ProjetIA-20-PAMR-0010), which plans to use AI methods to make in-silico determinations of the antibioresistance phenotypes for _Escherichia coli_, _Klebsiella pneumoniae_ and _Pseudomonas aeruginosa_. \
-This repository is the extension of our [web-service](http://iorgalab.org:4567/micai). \
+This repository is the extension of our [web-service](http://iorgalab.org:4567/micai), implementing XGBoost models to predict antibiotic resistance profiles with binary classification and regression tasks. The phenotypes are predicted from the genomic sequences using nucleotides k-mer presence/absence or proteins k-mer presence/absence. \
 It enables the user to :
 
 - Run the exact same predictions than the web-service locally
@@ -67,7 +67,6 @@ Our models are trained on 2 task :
 The mode can be chose using the option "--mode [code]", with [code] being either "binary" or "regression".
 
 Please note that due to the lack of breakpoint for the binary task, or a data distribution not large enough in our dataset for the regression task, some antibiotics might appear in one mode and not in the other. \
-Furthermore, we might lack of training data in some range of the MIC predictions. Consequently, we grouped together neighbouring MIC zones : "From x to y".
 
 ## The encoding (mandatory)
 
@@ -117,3 +116,13 @@ python group_predictor.py --path [path] --species [species] --mode [mode] --enco
 python single_predictor.py --file example_sample_Ec.faa --species Ec --mode binary --encoding prot
 python group_predictor.py --path example_folder_assembly_Kp --species Kp --mode regression --encoding nucl --size 42 --output tab_Kp.csv
 ```
+
+# Features importance
+We analyzed the XGBoost models trained with proteins k-mer encoding for the three species, to determine which features are the most important during prediction, and then analyzed the corresponding genes. In the folder "features_importance", we provide Excel files with the feature importance per model for each species, antibiotic and k-mer size. They contain 6 main values for each feature: 
+- gain: the gain obtained from the corresponding XGBoost model
+- shap_value: the Shapley value for this feature obtained from the training set
+- shap_presence: the Shapley value for strains in the training set where the feature is present
+- shap_absence: the Shapley value for strains in the training set where the feature is absent
+- shap_diff: shap_presence - shap_absence
+- protein: the annotation from PROKKA of the feature.
+Each feature is a group of k-mer with the same presence/absence profile in the training set. We examined the gene names to which they belong. Each k-mer from a feature, can be found in one or multiple protein sequences that can occur within the same strain or across different strains, potentially with different protein annotations. Additionally, each protein sequence has a single annotation, possibly shared with other protein sequences.
