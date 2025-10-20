@@ -119,10 +119,12 @@ python group_predictor.py --path example_folder_assembly_Kp --species Kp --mode 
 
 # Features importance
 We analyzed the XGBoost models trained with proteins k-mer encoding for the three species, to determine which features are the most important during prediction, and then analyzed the corresponding genes. In the folder "features_importance", we provide Excel files with the feature importance per model for each species, antibiotic and k-mer size. They contain 6 main values for each feature: 
+
 - gain: the gain obtained from the corresponding XGBoost model
 - shap_value: the Shapley value for this feature obtained from the training set
 - shap_presence: the Shapley value for strains in the training set where the feature is present
 - shap_absence: the Shapley value for strains in the training set where the feature is absent
 - shap_diff: shap_presence - shap_absence
 - proteins: the annotation from PROKKA of the feature.
+
 Each feature is a group of k-mer with the same presence/absence profile in the training set. We examined the gene names to which they belong. Each k-mer from a feature, can be found in one or multiple protein sequences that can occur within the same strain or across different strains, potentially with different protein annotations. Additionally, each protein sequence has a single annotation, possibly shared with other protein sequences.
